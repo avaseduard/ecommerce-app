@@ -1,16 +1,18 @@
 import { useState } from 'react'
 import { auth } from '../../firebase'
-import { toast, ToastContainer } from 'react-toastify'
-
-import 'react-toastify/dist/ReactToastify.css'
+import { toast } from 'react-toastify'
 
 const Register = () => {
   const [email, setEmail] = useState('')
 
   const handleSubmit = async e => {
+    if (!email) {
+      toast.error('Email is required.')
+    }
+    
     e.preventDefault()
     const config = {
-      url: 'http://localhost:3000/register/completed',
+      url: process.env.REACT_APP_REGISTER_REDIRECT_URL,
       handleCodeInApp: true,
     }
     await auth.sendSignInLinkToEmail(email, config)
@@ -27,7 +29,6 @@ const Register = () => {
     <div className='container p-5'>
       <div className='row'>
         <div className='col-md-6 offset-md-3'>
-          <ToastContainer />
           <h4>register</h4>
           <form onSubmit={handleSubmit}>
             <input
@@ -38,6 +39,7 @@ const Register = () => {
               onChange={e => setEmail(e.target.value)}
               autoFocus
             />
+            <br />
             <button type='submit' className='btn btn-primary'>
               submit
             </button>

@@ -1,10 +1,11 @@
 In progress...
 
 Made using:
-// React
-// React router
-// Firebase
 
-// Bootstrap
-// Ant Design
-// Toastify
+- React
+- React router
+- Firebase
+
+- Bootstrap
+- Ant Design
+- Toastify

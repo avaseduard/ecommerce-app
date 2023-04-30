@@ -6,11 +6,12 @@ const Register = () => {
   const [email, setEmail] = useState('')
 
   const handleSubmit = async e => {
+    e.preventDefault()
+    
     if (!email) {
       toast.error('Email is required.')
     }
     
-    e.preventDefault()
     const config = {
       url: process.env.REACT_APP_REGISTER_REDIRECT_URL,
       handleCodeInApp: true,

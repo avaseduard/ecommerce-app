@@ -1,23 +1,66 @@
 import { useState } from 'react'
-import { auth } from '../../firebase'
-import { MailOutlined } from '@ant-design/icons'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { auth, googleAuthProvider } from '../../firebase'
+import { MailOutlined, GoogleOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import { toast } from 'react-toastify'
 
+import { setCurrentUser } from '../../store/reducers/user.reducer'
+
 const Login = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
 
+  // Login with email and password; get the result from firebase, destructure user and token and update them to redux store
   const handleSubmit = async e => {
     e.preventDefault()
-    console.table(email, password)
+    setLoading(true)
+    try {
+      const result = await auth.signInWithEmailAndPassword(email, password)
+      const { user } = result
+      const idTokenResult = await user.getIdTokenResult()
+      dispatch(
+        setCurrentUser({
+          email: user.email,
+          token: idTokenResult.token,
+        })
+      )
+      navigate('/')
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+      setLoading(false)
+    }
+  }
+
+  // Login with google; get the result from firebase, destructure user and token and update them to redux store
+  const googleLogin = async () => {
+    try {
+      const result = await auth.signInWithPopup(googleAuthProvider)
+      const { user } = result
+      const idTokenResult = await user.getIdTokenResult()
+      dispatch(
+        setCurrentUser({
+          email: user.email,
+          token: idTokenResult.token,
+        })
+      )
+      navigate('/')
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+    }
   }
 
   return (
     <div className='container p-5'>
       <div className='row'>
         <div className='col-md-6 offset-md-3'>
-          <h4>login</h4>
+          {loading ? <h4>loading...</h4> : <h4>login</h4>}
           <form onSubmit={handleSubmit}>
             <input
               type='email'
@@ -47,6 +90,18 @@ const Login = () => {
               disabled={!email || password.length < 6}
             >
               login with email & password
+            </Button>
+            <Button
+              onClick={googleLogin}
+              type='primary'
+              danger
+              className='mb-3'
+              block
+              shape='round'
+              icon={<GoogleOutlined />}
+              size='large'
+            >
+              login with google
             </Button>
           </form>
         </div>

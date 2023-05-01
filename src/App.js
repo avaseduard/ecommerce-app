@@ -19,7 +19,6 @@ const App = () => {
     const unsubscribe = auth.onAuthStateChanged(async user => {
       if (user) {
         const idTokenResult = await user.getIdTokenResult()
-        console.log('USER', user)
         dispatch(
           setCurrentUser({
             email: user.email,

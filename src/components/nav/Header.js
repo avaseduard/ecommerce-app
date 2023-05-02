@@ -42,8 +42,7 @@ const Header = () => {
       icon: <HomeOutlined />,
     },
     {
-      // label: 'user',
-      label: isLoading ? 'user' : currentUser.email.split('@')[0],
+      label: 'user',
       key: 'user',
       icon: <SettingOutlined />,
       children: [

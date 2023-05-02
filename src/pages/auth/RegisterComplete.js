@@ -8,10 +8,12 @@ const RegisterComplete = ({ history }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  // Auto complete the email field from local storage
   useEffect(() => {
     setEmail(window.localStorage.getItem('emailForRegistration'))
   }, [])
 
+  // Take user's input password and update it to firebase
   const handleSubmit = async e => {
     e.preventDefault()
     // Email and password validation
@@ -24,9 +26,10 @@ const RegisterComplete = ({ history }) => {
       toast.error('Password must be at least 6 characters long.')
       return
     }
-
+// 
     try {
       const result = await auth.signInWithEmailLink(email, window.location.href)
+      // 
       if (result.user.emailVerified) {
         // remove user's email address from local storage
         window.localStorage.removeItem('emailForRegistration')

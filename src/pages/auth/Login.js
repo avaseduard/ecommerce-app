@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
 import { auth, googleAuthProvider } from '../../firebase'
 import { MailOutlined, GoogleOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
@@ -14,11 +14,20 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const { user } = useSelector(state => ({ ...state }))
+
+  // Redirect logged in users to home page
+  useEffect(() => {
+    if (user.currentUser && user.currentUser.token) navigate('/')
+  }, [user.currentUser])
 
   // Login with email and password; get the result from firebase, destructure user and token and update them to redux store
   const handleSubmit = async e => {
+    //
     e.preventDefault()
+    //
     setLoading(true)
+    //
     try {
       const result = await auth.signInWithEmailAndPassword(email, password)
       const { user } = result
@@ -103,6 +112,9 @@ const Login = () => {
             >
               login with google
             </Button>
+            <Link to='/forgot-password' className='text-danger'>
+              forgot password?
+            </Link>
           </form>
         </div>
       </div>

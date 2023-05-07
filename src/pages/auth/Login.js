@@ -7,6 +7,7 @@ import { Button } from 'antd'
 import { toast } from 'react-toastify'
 
 import { setCurrentUser } from '../../store/reducers/user.reducer'
+import { createOrUpdateUser } from '../../functions/auth'
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -21,7 +22,7 @@ const Login = () => {
     if (user.currentUser && user.currentUser.token) navigate('/')
   }, [user.currentUser])
 
-  // Login with email and password; get the result from firebase, destructure user and token and update them to redux store
+  // Login with email and password; get the result from firebase, destructure user and token and update them to redux store; send the token from frontend to backend
   const handleSubmit = async e => {
     //
     e.preventDefault()
@@ -30,14 +31,25 @@ const Login = () => {
     //
     try {
       const result = await auth.signInWithEmailAndPassword(email, password)
+      //
       const { user } = result
+      //
       const idTokenResult = await user.getIdTokenResult()
-      dispatch(
-        setCurrentUser({
-          email: user.email,
-          token: idTokenResult.token,
+      // Get the user's info from backend and send it to redux store
+      createOrUpdateUser(idTokenResult.token)
+        .then(response => {
+          dispatch(
+            setCurrentUser({
+              name: response.data.name,
+              email: response.data.email,
+              token: idTokenResult.token,
+              role: response.data.role,
+              _id: response.data._id,
+            })
+          )
         })
-      )
+        .catch()
+      //
       navigate('/')
     } catch (error) {
       console.log(error)
@@ -52,12 +64,20 @@ const Login = () => {
       const result = await auth.signInWithPopup(googleAuthProvider)
       const { user } = result
       const idTokenResult = await user.getIdTokenResult()
-      dispatch(
-        setCurrentUser({
-          email: user.email,
-          token: idTokenResult.token,
+      // Get the user's info from backend and send it to redux store
+      createOrUpdateUser(idTokenResult.token)
+        .then(response => {
+          dispatch(
+            setCurrentUser({
+              name: response.data.name,
+              email: response.data.email,
+              token: idTokenResult.token,
+              role: response.data.role,
+              _id: response.data._id,
+            })
+          )
         })
-      )
+        .catch()
       navigate('/')
     } catch (error) {
       console.log(error)

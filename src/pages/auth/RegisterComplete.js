@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { auth } from '../../firebase'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 
+import { setCurrentUser } from '../../store/reducers/user.reducer'
+import { createOrUpdateUser } from '../../functions/auth'
+
 const RegisterComplete = ({ history }) => {
-  let navigate = useNavigate()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const { user } = useSelector(state => ({ ...state }))
 
   // Auto complete the email field from local storage
   useEffect(() => {
@@ -26,10 +32,10 @@ const RegisterComplete = ({ history }) => {
       toast.error('Password must be at least 6 characters long.')
       return
     }
-// 
+    //
     try {
       const result = await auth.signInWithEmailLink(email, window.location.href)
-      // 
+      //
       if (result.user.emailVerified) {
         // remove user's email address from local storage
         window.localStorage.removeItem('emailForRegistration')
@@ -38,8 +44,20 @@ const RegisterComplete = ({ history }) => {
         await user.updatePassword(password)
         // get user's tokenfrom firebase
         const idTokenResult = await user.getIdTokenResult()
-        // push to redux store
-
+        // Get the user's info from backend and send it to redux store
+        createOrUpdateUser(idTokenResult.token)
+          .then(response => {
+            dispatch(
+              setCurrentUser({
+                name: response.data.name,
+                email: response.data.email,
+                token: idTokenResult.token,
+                role: response.data.role,
+                _id: response.data._id,
+              })
+            )
+          })
+          .catch()
         // redirect
         navigate('/')
       }

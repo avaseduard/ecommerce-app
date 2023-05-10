@@ -14,6 +14,8 @@ import RegisterComplete from './pages/auth/RegisterComplete'
 import ForgotPassword from './pages/auth/ForgotPassword'
 import UserRoute from './components/routes/UserRoute'
 import History from './pages/user/History'
+import AdminRoute from './components/routes/AdminRoute'
+import AdminDashboard from './pages/admin/AdminDashboard'
 import Password from './pages/user/Password'
 import Wishlist from './pages/user/Wishlist'
 
@@ -59,6 +61,9 @@ const App = () => {
         <Route path='user/password' element={<Password />} />
         <Route path='user/wishlist' element={<Wishlist />} />
         {/* </Route> */}
+        <Route element={<AdminRoute />}>
+          <Route path='admin/dashboard' element={<AdminDashboard />} />
+        </Route>
       </Routes>
     </>
   )

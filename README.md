@@ -9,3 +9,7 @@ Made using:
 - Bootstrap
 - Ant Design
 - Toastify
+- Axios
+
+Things to do:
+- repair redirect from /user/history

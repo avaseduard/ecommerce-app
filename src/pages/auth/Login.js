@@ -17,10 +17,19 @@ const Login = () => {
   const [loading, setLoading] = useState(false)
   const { user } = useSelector(state => ({ ...state }))
 
+  // Redirect user based on the role of admin or subscriber
+  const roleBasedRedirect = response => {
+    if (response.data.role === 'admin') {
+      navigate('/admin/dashboard')
+    } else {
+      navigate('/user/history')
+    }
+  }
+
   // Redirect logged in users to home page
-  useEffect(() => {
-    if (user.currentUser && user.currentUser.token) navigate('/')
-  }, [user.currentUser])
+  // useEffect(() => {
+  //   if (user.currentUser && user.currentUser.token) navigate('/')
+  // }, [user.currentUser])
 
   // Login with email and password; get the result from firebase, destructure user and token and update them to redux store; send the token from frontend to backend
   const handleSubmit = async e => {
@@ -47,10 +56,9 @@ const Login = () => {
               _id: response.data._id,
             })
           )
+          roleBasedRedirect(response)
         })
-        .catch()
-      //
-      navigate('/')
+        .catch(error => console.log(error))
     } catch (error) {
       console.log(error)
       toast.error(error.message)
@@ -76,9 +84,9 @@ const Login = () => {
               _id: response.data._id,
             })
           )
+          roleBasedRedirect(response)
         })
-        .catch()
-      navigate('/')
+        .catch(error => console.log(error))
     } catch (error) {
       console.log(error)
       toast.error(error.message)

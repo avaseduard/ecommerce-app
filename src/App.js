@@ -12,6 +12,12 @@ import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import RegisterComplete from './pages/auth/RegisterComplete'
 import ForgotPassword from './pages/auth/ForgotPassword'
+import UserRoute from './components/routes/UserRoute'
+import History from './pages/user/History'
+import Password from './pages/user/Password'
+import Wishlist from './pages/user/Wishlist'
+
+import { currentUser } from './functions/auth'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -20,12 +26,19 @@ const App = () => {
     const unsubscribe = auth.onAuthStateChanged(async user => {
       if (user) {
         const idTokenResult = await user.getIdTokenResult()
-        dispatch(
-          setCurrentUser({
-            email: user.email,
-            token: idTokenResult.token,
+        currentUser(idTokenResult.token)
+          .then(response => {
+            dispatch(
+              setCurrentUser({
+                name: response.data.name,
+                email: response.data.email,
+                token: idTokenResult.token,
+                role: response.data.role,
+                _id: response.data._id,
+              })
+            )
           })
-        )
+          .catch(error => console.log(error))
       }
     })
     return unsubscribe
@@ -41,6 +54,11 @@ const App = () => {
         <Route path='/register' element={<Register />} />
         <Route path='/register/complete' element={<RegisterComplete />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
+        {/* <Route element={<UserRoute />}> */}
+        <Route path='user/history' element={<History />} />
+        <Route path='user/password' element={<Password />} />
+        <Route path='user/wishlist' element={<Wishlist />} />
+        {/* </Route> */}
       </Routes>
     </>
   )

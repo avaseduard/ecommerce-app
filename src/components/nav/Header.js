@@ -19,13 +19,14 @@ const Header = () => {
   const navigate = useNavigate()
 
   const { user } = useSelector(state => ({ ...state }))
-  const currentUser = user.currentUser
+  //! const currentUser = user.currentUser
 
   const logout = () => {
     auth.signOut()
     dispatch(
       logoutUser({
-        currentUser: null,
+        //! currentUser: null,
+        user: null,
       })
     )
     navigate('/')

@@ -4,8 +4,9 @@ import { auth } from '../../firebase'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 
-import { setCurrentUser } from '../../store/reducers/user.reducer'
+//! import { setCurrentUser } from '../../store/reducers/user.reducer'
 import { createOrUpdateUser } from '../../functions/auth'
+import { setUser } from '../../store/reducers/user.reducer'
 
 const RegisterComplete = ({ history }) => {
   const dispatch = useDispatch()
@@ -48,7 +49,8 @@ const RegisterComplete = ({ history }) => {
         createOrUpdateUser(idTokenResult.token)
           .then(response => {
             dispatch(
-              setCurrentUser({
+              //! setCurrentUser({
+                setUser({
                 name: response.data.name,
                 email: response.data.email,
                 token: idTokenResult.token,

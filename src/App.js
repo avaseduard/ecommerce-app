@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { auth } from './firebase'
 import { useDispatch } from 'react-redux'
-import { setCurrentUser } from './store/reducers/user.reducer'
+//! import { setCurrentUser } from './store/reducers/user.reducer'
+import { setUser } from './store/reducers/user.reducer'
 import { Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -31,7 +32,8 @@ const App = () => {
         currentUser(idTokenResult.token)
           .then(response => {
             dispatch(
-              setCurrentUser({
+              //! setCurrentUser({
+              setUser({
                 name: response.data.name,
                 email: response.data.email,
                 token: idTokenResult.token,
@@ -56,13 +58,13 @@ const App = () => {
         <Route path='/register' element={<Register />} />
         <Route path='/register/complete' element={<RegisterComplete />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
-        {/* <Route element={<UserRoute />}> */}
-        <Route path='user/history' element={<History />} />
-        <Route path='user/password' element={<Password />} />
-        <Route path='user/wishlist' element={<Wishlist />} />
-        {/* </Route> */}
+        <Route element={<UserRoute />}>
+          <Route path='user/history' element={<History />} />
+          <Route path='user/password' element={<Password />} />
+          <Route path='user/wishlist' element={<Wishlist />} />
+        </Route>
         <Route element={<AdminRoute />}>
-          <Route path='admin/dashboard' element={<AdminDashboard />} />
+          <Route path='/admin/dashboard' element={<AdminDashboard />} />
         </Route>
       </Routes>
     </>

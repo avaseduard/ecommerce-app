@@ -6,7 +6,8 @@ import { MailOutlined, GoogleOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import { toast } from 'react-toastify'
 
-import { setCurrentUser } from '../../store/reducers/user.reducer'
+//! import { setCurrentUser } from '../../store/reducers/user.reducer'
+import { setUser } from '../../store/reducers/user.reducer'
 import { createOrUpdateUser } from '../../functions/auth'
 
 const Login = () => {
@@ -48,7 +49,8 @@ const Login = () => {
       createOrUpdateUser(idTokenResult.token)
         .then(response => {
           dispatch(
-            setCurrentUser({
+            //! setCurrentUser({
+              setUser({
               name: response.data.name,
               email: response.data.email,
               token: idTokenResult.token,
@@ -76,7 +78,8 @@ const Login = () => {
       createOrUpdateUser(idTokenResult.token)
         .then(response => {
           dispatch(
-            setCurrentUser({
+            //! setCurrentUser({
+              setUser({
               name: response.data.name,
               email: response.data.email,
               token: idTokenResult.token,

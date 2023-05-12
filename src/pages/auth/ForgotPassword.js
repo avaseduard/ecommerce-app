@@ -12,8 +12,10 @@ const ForgotPassword = () => {
 
   // Redirect logged in users to home page
   useEffect(() => {
-    if (user.currentUser && user.currentUser.token) navigate('/')
-  }, [user.currentUser])
+    //!   if (user.currentUser && user.currentUser.token) navigate('/')
+    //! }, [user.currentUser])
+    if (user && user.token) navigate('/')
+  }, [user])
 
   // Request password forgot link from firebase
   const handleSubmit = async e => {

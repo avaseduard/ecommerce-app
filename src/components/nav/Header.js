@@ -52,8 +52,20 @@ const Header = () => {
           // label: 'Item 1',
           children: [
             {
-              label: 'Option 1',
-              key: 'setting:1',
+              label:
+                user?.user?.role === 'subscriber' ? (
+                  <Link to='/user/history' style={{ textDecoration: 'none' }}>
+                    Dashboard
+                  </Link>
+                ) : (
+                  <Link
+                    to='/admin/dashboard'
+                    style={{ textDecoration: 'none' }}
+                  >
+                    Dashboard
+                  </Link>
+                ),
+              // key: 'setting:1',
             },
             {
               label: 'Option 2',

@@ -1,8 +1,15 @@
+import AdminNav from '../../components/nav/AdminNav'
+
 const AdminDashboard = () => {
   return (
-    <>
-      <p>This is the admin's dashboard</p>
-    </>
+    <div className='container-fluid'>
+      <div className='row'>
+        <div className='col-md-2'>
+          <AdminNav />
+        </div>
+        <div className='col'>admin's dashboard</div>
+      </div>
+    </div>
   )
 }
 

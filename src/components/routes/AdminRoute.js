@@ -8,8 +8,7 @@ const AdminRoute = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const { user } = useSelector(state => ({ ...state }))
 
-  console.log(user.user)
-
+  // Check for user token in redux store and for the admin check in backend
   useEffect(() => {
     if (user?.user?.token) {
       currentAdmin(user?.user?.token)
@@ -26,6 +25,7 @@ const AdminRoute = ({ children }) => {
     }
   }, [user])
 
+  // While waiting for the user from Redux and backend, show loading
   if (loading) {
     return <>Loading...</>
   }

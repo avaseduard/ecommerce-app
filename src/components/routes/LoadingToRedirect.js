@@ -1,3 +1,5 @@
+//! This component is not used for now
+
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 

@@ -50,7 +50,7 @@ const Login = () => {
         .then(response => {
           dispatch(
             //! setCurrentUser({
-              setUser({
+            setUser({
               name: response.data.name,
               email: response.data.email,
               token: idTokenResult.token,
@@ -79,7 +79,7 @@ const Login = () => {
         .then(response => {
           dispatch(
             //! setCurrentUser({
-              setUser({
+            setUser({
               name: response.data.name,
               email: response.data.email,
               token: idTokenResult.token,

@@ -16,21 +16,25 @@ const CategoryCreate = () => {
   const [categories, setCategories] = useState([])
   const { user } = useSelector(state => ({ ...state }))
 
+  // Load categories when component mounts
   useEffect(() => {
     loadCategories()
   }, [])
 
+  // Get categories from backend
   const loadCategories = () =>
     getCategories().then(res => setCategories(res.data))
 
+  // Add a new category
   const handleSubmit = e => {
     e.preventDefault()
     setLoading(true)
+    // Use the create category method to create one in database
     createCategory({ name }, user.user.token)
       .then(res => {
         setLoading(false)
         setName('')
-        toast.success(`"${res.data.name} category has been created`)
+        toast.success(`"${res.data.name}" category has been created`)
         loadCategories()
       })
       .catch(err => {
@@ -42,9 +46,12 @@ const CategoryCreate = () => {
       })
   }
 
+  // Delete a category
   const handleRemove = async slug => {
+    // Prompt admin for confirmation
     if (window.confirm(`Are you sure you want to delete ${slug} category`)) {
       setLoading(true)
+      // Use remobve category method to remove one form database
       removeCategory(slug, user.user.token)
         .then(res => {
           setLoading(false)
@@ -74,7 +81,7 @@ const CategoryCreate = () => {
             <h4>Create category</h4>
           )}
           <form onSubmit={handleSubmit} className='form-group'>
-            <label>Name</label>
+            <label>Enter new category name</label>
             <input
               type='text'
               className='form-control'

@@ -20,6 +20,7 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import Password from './pages/user/Password'
 import Wishlist from './pages/user/Wishlist'
 import CategoryCreate from './pages/admin/category/CategoryCreate'
+import CategoryUpdate from './pages/admin/category/CategoryUpdate'
 
 import { currentUser } from './functions/auth'
 
@@ -67,6 +68,7 @@ const App = () => {
         <Route element={<AdminRoute />}>
           <Route path='/admin/dashboard' element={<AdminDashboard />} />
           <Route path='/admin/category' element={<CategoryCreate />} />
+          <Route path='/admin/category/:slug' element={<CategoryUpdate />} />
         </Route>
       </Routes>
     </>

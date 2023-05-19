@@ -2,12 +2,11 @@ import { useEffect } from 'react'
 import { auth } from './firebase'
 import { useDispatch } from 'react-redux'
 //! import { setCurrentUser } from './store/reducers/user.reducer'
-import { setUser } from './store/reducers/user.reducer'
 import { Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-import Header from './components/nav/Header' //
+import Header from './components/nav/Header'
 import Home from './pages/Home'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
@@ -21,8 +20,10 @@ import Password from './pages/user/Password'
 import Wishlist from './pages/user/Wishlist'
 import CategoryCreate from './pages/admin/category/CategoryCreate'
 import CategoryUpdate from './pages/admin/category/CategoryUpdate'
+import SubcategoryCreate from './pages/admin/subcategory/SubcategoryCreate'
 
 import { currentUser } from './functions/auth'
+import { setUser } from './store/reducers/user.reducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -69,6 +70,7 @@ const App = () => {
           <Route path='/admin/dashboard' element={<AdminDashboard />} />
           <Route path='/admin/category' element={<CategoryCreate />} />
           <Route path='/admin/category/:slug' element={<CategoryUpdate />} />
+          <Route path='/admin/subcategory' element={<SubcategoryCreate />} />
         </Route>
       </Routes>
     </>

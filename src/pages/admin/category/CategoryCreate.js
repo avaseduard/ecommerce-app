@@ -9,11 +9,14 @@ import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import CategoryForm from '../../../components/forms/CategoryForm'
+import LocalSearch from '../../../components/forms/LocalSearch'
 
 const CategoryCreate = () => {
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState([])
+  const [keyword, setKeyword] = useState('')
   const { user } = useSelector(state => ({ ...state }))
 
   // Load categories when component mounts
@@ -68,6 +71,10 @@ const CategoryCreate = () => {
     }
   }
 
+  //
+  const searched = keyword => category =>
+    category.name.toLowerCase().includes(keyword)
+
   return (
     <div className='container-fluid'>
       <div className='row'>
@@ -80,21 +87,13 @@ const CategoryCreate = () => {
           ) : (
             <h4>Create category</h4>
           )}
-          <form onSubmit={handleSubmit} className='form-group'>
-            <label>Enter new category name</label>
-            <input
-              type='text'
-              className='form-control'
-              onChange={e => setName(e.target.value)}
-              value={name}
-              autoFocus
-              required
-            />
-            <br />
-            <button className='btn btn-outline-primary'>Save</button>
-          </form>
-          <br />
-          {categories.map(category => (
+          <CategoryForm
+            handleSubmit={handleSubmit}
+            name={name}
+            setName={setName}
+          />
+          <LocalSearch keyword={keyword} setKeyword={setKeyword} />
+          {categories.filter(searched(keyword)).map(category => (
             <div key={category._id} className='alert alert-secondary'>
               {category.name}{' '}
               <span

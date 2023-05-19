@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react'
 import AdminNav from '../../../components/nav/AdminNav'
 import {
-  createCategory,
-  getCategories,
   getCategory,
-  removeCategory,
   updateCategory,
 } from '../../../functions/category'
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { useNavigate, useParams } from 'react-router-dom'
+import CategoryForm from '../../../components/forms/CategoryForm'
 
 const CategoryUpdate = () => {
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
-  const [categories, setCategories] = useState([])
   const { user } = useSelector(state => ({ ...state }))
   const { slug } = useParams()
   const navigate = useNavigate()
@@ -50,28 +46,6 @@ const CategoryUpdate = () => {
       })
   }
 
-  // // Delete a category
-  // const handleRemove = async slug => {
-  //   // Prompt admin for confirmation
-  //   if (window.confirm(`Are you sure you want to delete ${slug} category`)) {
-  //     setLoading(true)
-  //     // Use remobve category method to remove one form database
-  //     removeCategory(slug, user.user.token)
-  //       .then(res => {
-  //         setLoading(false)
-  //         toast.success(`${res.data.name} category successfully removed`)
-  //         // loadCategories()
-  //       })
-  //       .catch(err => {
-  //         setLoading(false)
-  //         console.log(err)
-  //         if (err.response.status === 400) {
-  //           toast.error(err.response.data)
-  //         }
-  //       })
-  //   }
-  // }
-
   return (
     <div className='container-fluid'>
       <div className='row'>
@@ -84,19 +58,11 @@ const CategoryUpdate = () => {
           ) : (
             <h4>Update category</h4>
           )}
-          <form onSubmit={handleSubmit} className='form-group'>
-            <label>Enter new name</label>
-            <input
-              type='text'
-              className='form-control'
-              onChange={e => setName(e.target.value)}
-              value={name}
-              autoFocus
-              required
-            />
-            <br />
-            <button className='btn btn-outline-primary'>Save</button>
-          </form>
+          <CategoryForm
+            handleSubmit={handleSubmit}
+            name={name}
+            setName={setName}
+          />
           <br />
         </div>
       </div>

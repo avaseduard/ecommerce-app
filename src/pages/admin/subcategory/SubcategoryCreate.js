@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
 import AdminNav from '../../../components/nav/AdminNav'
 import {
-  createCategory,
   getCategories,
-  removeCategory,
 } from '../../../functions/category'
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
@@ -17,7 +15,7 @@ import {
   removeSubcategory,
 } from '../../../functions/subcategory'
 
-const CategoryCreate = () => {
+const SubcategoryCreate = () => {
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState([])
@@ -64,13 +62,13 @@ const CategoryCreate = () => {
   // Delete a category
   const handleRemove = async slug => {
     // Prompt admin for confirmation
-    if (window.confirm(`Are you sure you want to delete ${slug} category`)) {
+    if (window.confirm(`Are you sure you want to delete ${slug} subcategory`)) {
       setLoading(true)
       // Use remobve category method to remove one form database
       removeSubcategory(slug, user.user.token)
         .then(res => {
           setLoading(false)
-          toast.success(`${res.data.name} category successfully removed`)
+          toast.success(`${res.data.name} subcategory successfully removed`)
           loadSubcategories()
         })
         .catch(err => {
@@ -118,8 +116,6 @@ const CategoryCreate = () => {
             </select>
           </div>
 
-          {/* {JSON.stringify(categoryId)} */}
-
           <CategoryForm
             handleSubmit={handleSubmit}
             name={name}
@@ -150,4 +146,4 @@ const CategoryCreate = () => {
   )
 }
 
-export default CategoryCreate
+export default SubcategoryCreate

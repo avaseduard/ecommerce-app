@@ -21,6 +21,7 @@ import Wishlist from './pages/user/Wishlist'
 import CategoryCreate from './pages/admin/category/CategoryCreate'
 import CategoryUpdate from './pages/admin/category/CategoryUpdate'
 import SubcategoryCreate from './pages/admin/subcategory/SubcategoryCreate'
+import SubcategoryUpdate from './pages/admin/subcategory/SubcategoryUpdate'
 
 import { currentUser } from './functions/auth'
 import { setUser } from './store/reducers/user.reducer'
@@ -71,6 +72,10 @@ const App = () => {
           <Route path='/admin/category' element={<CategoryCreate />} />
           <Route path='/admin/category/:slug' element={<CategoryUpdate />} />
           <Route path='/admin/subcategory' element={<SubcategoryCreate />} />
+          <Route
+            path='/admin/subcategory/:slug'
+            element={<SubcategoryUpdate />}
+          />
         </Route>
       </Routes>
     </>

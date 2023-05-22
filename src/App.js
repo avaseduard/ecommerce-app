@@ -22,6 +22,7 @@ import CategoryCreate from './pages/admin/category/CategoryCreate'
 import CategoryUpdate from './pages/admin/category/CategoryUpdate'
 import SubcategoryCreate from './pages/admin/subcategory/SubcategoryCreate'
 import SubcategoryUpdate from './pages/admin/subcategory/SubcategoryUpdate'
+import ProductCreate from './pages/admin/product/ProductCreate'
 
 import { currentUser } from './functions/auth'
 import { setUser } from './store/reducers/user.reducer'
@@ -76,6 +77,7 @@ const App = () => {
             path='/admin/subcategory/:slug'
             element={<SubcategoryUpdate />}
           />
+          <Route path='/admin/product' element={<ProductCreate />} />
         </Route>
       </Routes>
     </>

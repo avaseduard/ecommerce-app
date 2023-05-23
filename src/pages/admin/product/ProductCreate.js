@@ -1,9 +1,14 @@
 import AdminNav from '../../../components/nav/AdminNav'
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createProduct } from '../../../functions/product'
 import { useNavigate } from 'react-router-dom'
+import ProductCreateForm from '../../../components/forms/ProductCreateForm'
+import {
+  getCategories,
+  getSubcategoriesByCategoryId,
+} from '../../../functions/category'
 
 const intitialState = {
   title: 'Example product 1',
@@ -25,22 +30,34 @@ const ProductCreate = () => {
   const navigate = useNavigate()
   const { user } = useSelector(state => ({ ...state }))
   const [values, setValues] = useState(intitialState)
-  const {
-    title,
-    description,
-    price,
-    categories,
-    category,
-    subcategories,
-    shipping,
-    quantity,
-    images,
-    colors,
-    brands,
-    color,
-    brand,
-  } = values
+  const [subcategoryOptions, setSucategoryOptions] = useState([])
 
+  // Get the categories from backend
+  const loadCategories = () =>
+    getCategories().then(categories =>
+      setValues({ ...values, categories: categories.data })
+    )
+
+  // Whenpage loads, populate categories for dropdown
+  useEffect(() => {
+    loadCategories()
+  }, [])
+
+  // When the admin selects a category, send the id to backend and return the subcategories
+  const handleCategoryChange = e => {
+    e.preventDefault()
+    setValues({ ...values, category: e.target.value })
+    getSubcategoriesByCategoryId(e.target.value).then(res => {
+      setSucategoryOptions(res.data)
+    })
+  }
+
+  // Spread through the values object form state and update the value of e.target.name with e.target.value
+  const handleChange = e => {
+    setValues({ ...values, [e.target.name]: e.target.value })
+  }
+
+  // Create product in database using the values input by user
   const handleSubmit = e => {
     e.preventDefault()
     createProduct(values, user.user.token)
@@ -58,12 +75,6 @@ const ProductCreate = () => {
       })
   }
 
-  // Spread through the values object form state and update the value of e.target.name with e.target.value
-  const handleChange = e => {
-    setValues({ ...values, [e.target.name]: e.target.value })
-    // console.log(e.target.name, '->', e.target.value)
-  }
-
   return (
     <div className='container-fluid'>
       <div className='row'>
@@ -71,101 +82,17 @@ const ProductCreate = () => {
           <AdminNav />
         </div>
 
+        {/* {JSON.stringify(values.categories)} */}
+
         <div className='col-md-10'>
           <h4>Create product</h4>
           <hr />
-          <form onSubmit={handleSubmit}>
-            <div className='form-group'>
-              <label>Title</label>
-              <input
-                type='text'
-                name='title'
-                className='form-control'
-                value={title}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className='form-group'>
-              <label>Description</label>
-              <input
-                type='text'
-                name='description'
-                className='form-control'
-                value={description}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className='form-group'>
-              <label>Price</label>
-              <input
-                type='number'
-                name='price'
-                className='form-control'
-                value={price}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className='form-group'>
-              <label>Shipping</label>
-              <select
-                name='shipping'
-                className='form-control'
-                onChange={handleChange}
-              >
-                <option>Please select...</option>
-                <option value='No'>No</option>
-                <option value='Yes'>Yes</option>
-              </select>
-            </div>
-
-            <div className='form-group'>
-              <label>Quantity</label>
-              <input
-                type='number'
-                name='quantity'
-                className='form-control'
-                value={quantity}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className='form-group'>
-              <label>Color</label>
-              <select
-                name='color'
-                className='form-control'
-                onChange={handleChange}
-              >
-                <option>Please select...</option>
-                {colors.map(color => (
-                  <option key={color} value={color}>
-                    {color}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className='form-group'>
-              <label>Brand</label>
-              <select
-                name='brand'
-                className='form-control'
-                onChange={handleChange}
-              >
-                <option>Please select...</option>
-                {brands.map(brand => (
-                  <option key={brand} value={brand}>
-                    {brand}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <br />
-            <button className='btn btn-outline-info'>Save</button>
-          </form>
+          <ProductCreateForm
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            values={values}
+            handleCategoryChange={handleCategoryChange}
+          />
         </div>
       </div>
     </div>

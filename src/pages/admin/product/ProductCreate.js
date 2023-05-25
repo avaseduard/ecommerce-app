@@ -31,6 +31,7 @@ const ProductCreate = () => {
   const { user } = useSelector(state => ({ ...state }))
   const [values, setValues] = useState(intitialState)
   const [subcategoryOptions, setSucategoryOptions] = useState([])
+  const [showSubcategories, setShowSubcategories] = useState(false)
 
   // Get the categories from backend
   const loadCategories = () =>
@@ -46,10 +47,11 @@ const ProductCreate = () => {
   // When the admin selects a category, send the id to backend and return the subcategories
   const handleCategoryChange = e => {
     e.preventDefault()
-    setValues({ ...values, category: e.target.value })
+    setValues({ ...values, subcategories: [], category: e.target.value })
     getSubcategoriesByCategoryId(e.target.value).then(res => {
       setSucategoryOptions(res.data)
     })
+    setShowSubcategories(true)
   }
 
   // Spread through the values object form state and update the value of e.target.name with e.target.value
@@ -64,8 +66,6 @@ const ProductCreate = () => {
       .then(res => {
         console.log(res)
         // toast.success(`"${res.data.title}" product has been created`)
-        window.alert(`"${res.data.title}" product has been created`)
-        window.location.reload()
         // navigate('/admin/products')
       })
       .catch(error => {
@@ -78,11 +78,10 @@ const ProductCreate = () => {
   return (
     <div className='container-fluid'>
       <div className='row'>
+
         <div className='col-md-2'>
           <AdminNav />
         </div>
-
-        {/* {JSON.stringify(values.categories)} */}
 
         <div className='col-md-10'>
           <h4>Create product</h4>
@@ -91,9 +90,13 @@ const ProductCreate = () => {
             handleChange={handleChange}
             handleSubmit={handleSubmit}
             values={values}
+            setValues={setValues}
             handleCategoryChange={handleCategoryChange}
+            subcategoryOptions={subcategoryOptions}
+            showSubcategories={showSubcategories}
           />
         </div>
+        
       </div>
     </div>
   )

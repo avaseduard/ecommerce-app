@@ -1,8 +1,15 @@
+import { Select, Space } from 'antd'
+const { Option } = Select
+
 const ProductCreateForm = ({
   handleChange,
   handleSubmit,
   handleCategoryChange,
+  subcategoryOptions,
+  showSubcategories,
   values,
+  //
+  setValues,
 }) => {
   const {
     title,
@@ -119,7 +126,30 @@ const ProductCreateForm = ({
             ))}
         </select>
       </div>
+
+      {showSubcategories && (
+        <div>
+          <label>Subcategory</label>
+          <Select
+            mode='multiple'
+            style={{
+              width: '100%',
+            }}
+            placeholder='please select'
+            value={subcategories}
+            onChange={value => setValues({ ...values, subcategories: value })}
+          >
+            {subcategoryOptions.length &&
+              subcategoryOptions.map(subcategory => (
+                <Option key={subcategory._id} value={subcategory._id}>
+                  {subcategory.name}
+                </Option>
+              ))}
+          </Select>
+        </div>
+      )}
       <br />
+      
       <button className='btn btn-outline-info'>Save</button>
     </form>
   )

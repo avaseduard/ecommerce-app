@@ -8,7 +8,6 @@ const ProductCreateForm = ({
   subcategoryOptions,
   showSubcategories,
   values,
-  //
   setValues,
 }) => {
   const {
@@ -29,6 +28,7 @@ const ProductCreateForm = ({
 
   return (
     <form onSubmit={handleSubmit}>
+
       <div className='form-group'>
         <label>Title</label>
         <input
@@ -148,9 +148,10 @@ const ProductCreateForm = ({
           </Select>
         </div>
       )}
+
       <br />
-      
       <button className='btn btn-outline-info'>Save</button>
+
     </form>
   )
 }

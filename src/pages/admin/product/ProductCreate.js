@@ -9,7 +9,10 @@ import {
   getCategories,
   getSubcategoriesByCategoryId,
 } from '../../../functions/category'
+import FileUpload from '../../../components/forms/FileUpload'
+import { LoadingOutlined } from '@ant-design/icons'
 
+// Initial keys and values of product state
 const intitialState = {
   title: 'Example product 1',
   description: 'Description of example product 1',
@@ -32,19 +35,20 @@ const ProductCreate = () => {
   const [values, setValues] = useState(intitialState)
   const [subcategoryOptions, setSucategoryOptions] = useState([])
   const [showSubcategories, setShowSubcategories] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  // Get the categories from backend
+  // Get the categories from backend and set them in state
   const loadCategories = () =>
     getCategories().then(categories =>
       setValues({ ...values, categories: categories.data })
     )
 
-  // Whenpage loads, populate categories for dropdown
+  // When page loads, populate categories for dropdown
   useEffect(() => {
     loadCategories()
   }, [])
 
-  // When the admin selects a category, send the id to backend and return the subcategories
+  // When the admin selects a category, send the id to backend, return the subcategories and populate the dropdown
   const handleCategoryChange = e => {
     e.preventDefault()
     setValues({ ...values, subcategories: [], category: e.target.value })
@@ -54,12 +58,12 @@ const ProductCreate = () => {
     setShowSubcategories(true)
   }
 
-  // Spread through the values object form state and update the value of e.target.name with e.target.value
+  // Dinamically take each key and value that the admin selects and set it to product state
   const handleChange = e => {
     setValues({ ...values, [e.target.name]: e.target.value })
   }
 
-  // Create product in database using the values input by user
+  // Create product in database using the values input by admin
   const handleSubmit = e => {
     e.preventDefault()
     createProduct(values, user.user.token)
@@ -78,14 +82,24 @@ const ProductCreate = () => {
   return (
     <div className='container-fluid'>
       <div className='row'>
-
         <div className='col-md-2'>
           <AdminNav />
         </div>
 
         <div className='col-md-10'>
-          <h4>Create product</h4>
+          {loading ? <LoadingOutlined className='h1 text-danger' /> : <h4>Create product</h4>}
           <hr />
+
+          {JSON.stringify(values.images)}
+
+          <div className='p-3'>
+            <FileUpload
+              values={values}
+              setValues={setValues}
+              setLoading={setLoading}
+            />
+          </div>
+
           <ProductCreateForm
             handleChange={handleChange}
             handleSubmit={handleSubmit}
@@ -96,7 +110,6 @@ const ProductCreate = () => {
             showSubcategories={showSubcategories}
           />
         </div>
-        
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import AdminNav from "../../components/nav/AdminNav"
+import AdminNav from '../../components/nav/AdminNav'
 
 const AdminDashboard = () => {
   return (
@@ -7,7 +7,10 @@ const AdminDashboard = () => {
         <div className='col-md-2'>
           <AdminNav />
         </div>
-        <div className='col'>admin's dashboard</div>
+
+        <div className='col'>
+          <h4>Admin dashboard</h4>
+        </div>
       </div>
     </div>
   )

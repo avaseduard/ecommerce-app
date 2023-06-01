@@ -1,20 +1,23 @@
 import { Select } from 'antd'
 const { Option } = Select
 
-const ProductCreateForm = ({
+const ProductUpdateForm = ({
   handleChange,
   handleSubmit,
-  handleCategoryChange,
-  subcategoryOptions,
-  showSubcategories,
   values,
   setValues,
+  handleCategoryChange,
+  categories,
+  subcategoryOptions,
+  arrayOfSubcategoriesIds,
+  setArrayOfSubcategoriesIds,
+  selectedCategory
 }) => {
   const {
     title,
     description,
     price,
-    categories,
+    // categories,
     category,
     subcategories,
     shipping,
@@ -28,7 +31,6 @@ const ProductCreateForm = ({
 
   return (
     <form onSubmit={handleSubmit}>
-
       <div className='form-group'>
         <label>Title</label>
         <input
@@ -65,11 +67,12 @@ const ProductCreateForm = ({
       <div className='form-group'>
         <label>Shipping</label>
         <select
+          value={shipping}
+          // value={shipping === 'Yes' ? 'Yes' : 'No'}
           name='shipping'
           className='form-control'
           onChange={handleChange}
         >
-          <option>Please select...</option>
           <option value='No'>No</option>
           <option value='Yes'>Yes</option>
         </select>
@@ -88,8 +91,12 @@ const ProductCreateForm = ({
 
       <div className='form-group'>
         <label>Color</label>
-        <select name='color' className='form-control' onChange={handleChange}>
-          <option>Please select...</option>
+        <select
+          value={color}
+          name='color'
+          className='form-control'
+          onChange={handleChange}
+        >
           {colors.map(color => (
             <option key={color} value={color}>
               {color}
@@ -100,8 +107,12 @@ const ProductCreateForm = ({
 
       <div className='form-group'>
         <label>Brand</label>
-        <select name='brand' className='form-control' onChange={handleChange}>
-          <option>Please select...</option>
+        <select
+          value={brand}
+          name='brand'
+          className='form-control'
+          onChange={handleChange}
+        >
           {brands.map(brand => (
             <option key={brand} value={brand}>
               {brand}
@@ -114,10 +125,11 @@ const ProductCreateForm = ({
         <label>Category</label>
         <select
           name='category'
-          onChange={handleCategoryChange}
           className='form-control'
+          onChange={handleCategoryChange}
+          value={selectedCategory ? selectedCategory : category._id}
         >
-          <option>Please select...</option>
+          {/* <option>{category.name}</option> */}
           {categories.length > 0 &&
             categories.map(category => (
               <option key={category._id} value={category._id}>
@@ -127,33 +139,30 @@ const ProductCreateForm = ({
         </select>
       </div>
 
-      {showSubcategories && (
-        <div>
-          <label>Subcategory</label>
-          <Select
-            mode='multiple'
-            style={{
-              width: '100%',
-            }}
-            placeholder='please select'
-            value={subcategories}
-            onChange={value => setValues({ ...values, subcategories: value })}
-          >
-            {subcategoryOptions.length &&
-              subcategoryOptions.map(subcategory => (
-                <Option key={subcategory._id} value={subcategory._id}>
-                  {subcategory.name}
-                </Option>
-              ))}
-          </Select>
-        </div>
-      )}
+      <div>
+        <label>Subcategory</label>
+        <Select
+          mode='multiple'
+          style={{
+            width: '100%',
+          }}
+          placeholder='please select'
+          value={arrayOfSubcategoriesIds}
+          onChange={value => setArrayOfSubcategoriesIds(value)}
+        >
+          {subcategoryOptions.length &&
+            subcategoryOptions.map(subcategory => (
+              <Option key={subcategory._id} value={subcategory._id}>
+                {subcategory.name}
+              </Option>
+            ))}
+        </Select>
+      </div>
 
       <br />
       <button className='btn btn-outline-info'>Save</button>
-
     </form>
   )
 }
 
-export default ProductCreateForm
+export default ProductUpdateForm

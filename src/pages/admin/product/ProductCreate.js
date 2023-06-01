@@ -33,7 +33,7 @@ const ProductCreate = () => {
   const navigate = useNavigate()
   const { user } = useSelector(state => ({ ...state }))
   const [values, setValues] = useState(intitialState)
-  const [subcategoryOptions, setSucategoryOptions] = useState([])
+  const [subcategoryOptions, setSubcategoryOptions] = useState([])
   const [showSubcategories, setShowSubcategories] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -53,7 +53,7 @@ const ProductCreate = () => {
     e.preventDefault()
     setValues({ ...values, subcategories: [], category: e.target.value })
     getSubcategoriesByCategoryId(e.target.value).then(res => {
-      setSucategoryOptions(res.data)
+      setSubcategoryOptions(res.data)
     })
     setShowSubcategories(true)
   }
@@ -89,8 +89,6 @@ const ProductCreate = () => {
         <div className='col-md-10'>
           {loading ? <LoadingOutlined className='h1 text-danger' /> : <h4>Create product</h4>}
           <hr />
-
-          {JSON.stringify(values.images)}
 
           <div className='p-3'>
             <FileUpload

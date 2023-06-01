@@ -1,12 +1,12 @@
 import { Card } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import pictureunavailable from '../../../src/images/picture_unavailable.jpg'
+import { Link } from 'react-router-dom'
 
 const { Meta } = Card
 
-const AdminProductCard = ({ product }) => {
-  const { title, description, images } = product
-  console.log(description)
+const AdminProductCard = ({ product, handleRemove }) => {
+  const { title, description, images, slug } = product
 
   return (
     <Card
@@ -18,13 +18,18 @@ const AdminProductCard = ({ product }) => {
         />
       }
       actions={[
-        <EditOutlined className='text-warning' />,
-        <DeleteOutlined className='text-danger' />,
+        <>
+          <Link relative='path' to={`../../admin/product/${slug}`}>
+            <EditOutlined className='text-warning' />
+          </Link>
+          <DeleteOutlined
+            onClick={() => handleRemove(slug)}
+            className='text-danger'
+          />
+        </>,
       ]}
     >
-      <Meta 
-      title={title}
-      description={`${description?.substring(0, 40)}...`} />
+      <Meta title={title} description={`${description?.substring(0, 40)}...`} />
     </Card>
   )
 }

@@ -2,9 +2,12 @@ import AdminNav from '../../../components/nav/AdminNav'
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
-import { createProduct, getProductBySlug } from '../../../functions/product'
+import {
+  createProduct,
+  getProductBySlug,
+  updateProduct,
+} from '../../../functions/product'
 import { useNavigate, useParams } from 'react-router-dom'
-import ProductCreateForm from '../../../components/forms/ProductCreateForm'
 import {
   getCategories,
   getSubcategoriesByCategoryId,
@@ -18,7 +21,6 @@ const intitialState = {
   title: '',
   description: '',
   price: '',
-  // categories: [],
   category: '',
   subcategories: [],
   shipping: '',
@@ -37,9 +39,11 @@ const ProductUpdate = () => {
   const [categories, setCategories] = useState([])
   const [selectedCategory, setSelectedCategory] = useState('')
   const [arrayOfSubcategoriesIds, setArrayOfSubcategoriesIds] = useState([])
-  // const [showSubcategories, setShowSubcategories] = useState(false)
+  const [loading, setLoading] = useState(false)
   const { user } = useSelector(state => ({ ...state }))
+  const navigate = useNavigate()
 
+  // Populate the form with product info from db
   useEffect(() => {
     loadProduct()
     loadCategories()
@@ -54,13 +58,11 @@ const ProductUpdate = () => {
       getSubcategoriesByCategoryId(product.data.category._id).then(res =>
         setSubcategoryOptions(res.data)
       )
-      // Create array with sub ids to show as default
+      // Create array with product's subcategory ids to show in form
       let arr = []
       product.data.subcategories.map(subcategory => {
         arr.push(subcategory._id)
-        // console.log('ARR of subcategories', arr)
         setArrayOfSubcategoriesIds(arr)
-        // console.log('arrayOfSubcategoriesIds', arrayOfSubcategoriesIds)
       })
     })
   }
@@ -93,6 +95,22 @@ const ProductUpdate = () => {
   // Create product in database using the values input by admin
   const handleSubmit = e => {
     e.preventDefault()
+    setLoading(true)
+    values.subcategories = arrayOfSubcategoriesIds
+    // Update category in product state only if the user changed it
+    values.category = selectedCategory ? selectedCategory : values.category
+    // Update the product in database
+    updateProduct(slug, values, user.user.token)
+      .then(res => {
+        setLoading(false)
+        toast.success(`'${res.data.title}' has been updated`)
+        navigate('/admin/products')
+      })
+      .catch(error => {
+        setLoading(false)
+        console.log('PRODUCT UPDATE FAILED -->', error)
+        toast.error(error.response.data.error)
+      })
   }
 
   return (
@@ -103,10 +121,22 @@ const ProductUpdate = () => {
         </div>
 
         <div className='col-md-10'>
-          <h4>Update product</h4>
+          {loading ? (
+            <LoadingOutlined className='h1 text-danger' />
+          ) : (
+            <h4>Update product</h4>
+          )}
           <hr />
 
-          {JSON.stringify(values)}
+          {/* {JSON.stringify(values)} */}
+
+          <div className='p-3'>
+            <FileUpload
+              values={values}
+              setValues={setValues}
+              setLoading={setLoading}
+            />
+          </div>
 
           <ProductUpdateForm
             handleChange={handleChange}

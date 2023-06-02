@@ -148,10 +148,9 @@ const ProductCreateForm = ({
           </Select>
         </div>
       )}
-
       <br />
-      <button className='btn btn-outline-info'>Save</button>
 
+      <button className='btn btn-outline-info'>Save</button>
     </form>
   )
 }

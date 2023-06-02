@@ -17,7 +17,6 @@ const ProductUpdateForm = ({
     title,
     description,
     price,
-    // categories,
     category,
     subcategories,
     shipping,
@@ -68,7 +67,6 @@ const ProductUpdateForm = ({
         <label>Shipping</label>
         <select
           value={shipping}
-          // value={shipping === 'Yes' ? 'Yes' : 'No'}
           name='shipping'
           className='form-control'
           onChange={handleChange}
@@ -129,7 +127,6 @@ const ProductUpdateForm = ({
           onChange={handleCategoryChange}
           value={selectedCategory ? selectedCategory : category._id}
         >
-          {/* <option>{category.name}</option> */}
           {categories.length > 0 &&
             categories.map(category => (
               <option key={category._id} value={category._id}>
@@ -158,8 +155,8 @@ const ProductUpdateForm = ({
             ))}
         </Select>
       </div>
-
       <br />
+      
       <button className='btn btn-outline-info'>Save</button>
     </form>
   )

@@ -34,7 +34,6 @@ const FileUpload = ({ values, setValues, setLoading }) => {
               )
               // Get url response from server
               .then(res => {
-                console.log('IMAGE UPLOAD RESPONSE -->', res)
                 setLoading(false)
                 // Set url to images array in product create state
                 allUploadedFiles.push(res.data)

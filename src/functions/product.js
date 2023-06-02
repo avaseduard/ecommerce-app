@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-// Create new category
+// Create new product
 export const createProduct = async (product, authtoken) =>
   await axios.post(`${process.env.REACT_APP_API}/product`, product, {
     headers: {
@@ -8,11 +8,11 @@ export const createProduct = async (product, authtoken) =>
     },
   })
 
-// To list all products
+// List all products
 export const getProductsByCount = async count =>
   await axios.get(`${process.env.REACT_APP_API}/products/${count}`)
 
-// To remove a product
+// Remove a product
 export const removeProduct = async (slug, authtoken) =>
   await axios.delete(`${process.env.REACT_APP_API}/product/${slug}`, {
     headers: {
@@ -20,6 +20,14 @@ export const removeProduct = async (slug, authtoken) =>
     },
   })
 
-// To update a product
+// List product by slug
 export const getProductBySlug = async slug =>
   await axios.get(`${process.env.REACT_APP_API}/product/${slug}`)
+
+// Update product
+export const updateProduct = async (slug, product, authtoken) =>
+  await axios.put(`${process.env.REACT_APP_API}/product/${slug}`, product, {
+    headers: {
+      authtoken: authtoken,
+    },
+  })

@@ -1,52 +1,23 @@
-import { useEffect, useState } from 'react'
-import { getProductsByCount } from '../functions/product'
-import ProductCard from '../components/cards/ProductCard'
 import Jumbotron from '../components/cards/Jumbotron'
-import LoadingCard from '../components/cards/LoadingCard'
+import BestSellers from '../components/home/BestSellers'
+import NewArrivals from '../components/home/NewArrivals'
 
-const Home = () => {
-  const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(false)
-  const count = 3
+const Home = () => (
+  <>
+    <div className='jumbotron h1 text-center text-danger font-weight-bold'>
+      <Jumbotron text={['New arrivals', 'Best sellers', 'Special offers']} />
+    </div>
 
-  useEffect(() => {
-    loadAllProducts()
-  }, [])
+    <h4 className='jumbotron text-center p-3 mt-5 mb-5 display-4'>
+      New arrivals
+    </h4>
+    <NewArrivals />
 
-  const loadAllProducts = () => {
-    setLoading(true)
-    getProductsByCount(count)
-      .then(res => {
-        setLoading(false)
-        setProducts(res.data)
-      })
-      .catch(error => {
-        setLoading(false)
-        console.log(error)
-      })
-  }
-
-  return (
-    <>
-      <div className='jumbotron h1 text-center text-danger font-weight-bold'>
-        <Jumbotron text={['New arrivals', 'Best sellers', 'Special offers']} />
-      </div>
-
-      <div className='container'>
-        {loading ? (
-          <LoadingCard count={count} />
-        ) : (
-          <div className='row'>
-            {products.map(product => (
-              <div key={product._id} className='col-md-4'>
-                <ProductCard product={product} />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </>
-  )
-}
+    <h4 className='jumbotron text-center p-3 mt-5 mb-5 display-4'>
+      Best sellers
+    </h4>
+    <BestSellers />
+  </>
+)
 
 export default Home

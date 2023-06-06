@@ -8,7 +8,7 @@ export const createProduct = async (product, authtoken) =>
     },
   })
 
-// List all products
+// List all products by count
 export const getProductsByCount = async count =>
   await axios.get(`${process.env.REACT_APP_API}/products/${count}`)
 
@@ -30,4 +30,12 @@ export const updateProduct = async (slug, product, authtoken) =>
     headers: {
       authtoken: authtoken,
     },
+  })
+
+// List all products by sort criteria
+export const getProducts = async (sort, order, limit) =>
+  await axios.post(`${process.env.REACT_APP_API}/products`, {
+    sort: sort,
+    order: order,
+    limit: limit,
   })

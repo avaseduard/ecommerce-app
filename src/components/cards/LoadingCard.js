@@ -1,8 +1,8 @@
 import { Card, Skeleton } from 'antd'
 
-const LoadingCard = ({ count }) => (
+const LoadingCard = ({ limit }) => (
   <div className='row pb-5'>
-    {Array(count)
+    {Array(limit)
       .fill(true)
       .map((_, i) => (
         <Card key={i} className='col-md-4'>

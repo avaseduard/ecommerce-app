@@ -33,9 +33,13 @@ export const updateProduct = async (slug, product, authtoken) =>
   })
 
 // List all products by sort criteria
-export const getProducts = async (sort, order, limit) =>
+export const getProducts = async (sort, order, page) =>
   await axios.post(`${process.env.REACT_APP_API}/products`, {
     sort: sort,
     order: order,
-    limit: limit,
+    page: page,
   })
+
+// Get the number of products in db
+export const getProductsCount = async () =>
+  await axios.get(`${process.env.REACT_APP_API}/products/total`)

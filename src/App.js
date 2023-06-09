@@ -25,6 +25,7 @@ import SubcategoryUpdate from './pages/admin/subcategory/SubcategoryUpdate'
 import ProductCreate from './pages/admin/product/ProductCreate'
 import AllProducts from './pages/admin/product/AllProducts'
 import ProductUpdate from './pages/admin/product/ProductUpdate'
+import Product from './pages/Product'
 
 import { currentUser } from './functions/auth'
 import { setUser } from './store/reducers/user.reducer'
@@ -65,6 +66,7 @@ const App = () => {
         <Route path='/register' element={<Register />} />
         <Route path='/register/complete' element={<RegisterComplete />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/product/:slug' element={<Product />} />
         <Route element={<UserRoute />}>
           <Route path='user/history' element={<History />} />
           <Route path='user/password' element={<Password />} />

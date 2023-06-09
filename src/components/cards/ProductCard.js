@@ -1,11 +1,11 @@
 import { Card } from 'antd'
 import { EyeOutlined, ShoppingCartOutlined } from '@ant-design/icons'
-import pictureunavailable from '../../../src/images/picture_unavailable.jpg'
 import { Link } from 'react-router-dom'
+import pictureunavailable from '../../../src/images/picture_unavailable.jpg'
 
 const { Meta } = Card
 
-const ProductCard = ({product}) => {
+const ProductCard = ({ product }) => {
   const { title, description, images, slug } = product
 
   return (
@@ -24,9 +24,7 @@ const ProductCard = ({product}) => {
             <br />
             View product
           </Link>
-          <ShoppingCartOutlined
-            className='text-danger'
-          />
+          <ShoppingCartOutlined className='text-danger' />
           <br />
           Add to cart
         </>,

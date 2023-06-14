@@ -5,12 +5,15 @@ import { Carousel } from 'react-responsive-carousel'
 import pictureunavailable from '../../../src/images/picture_unavailable.jpg'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import ProductListItems from './ProductListItems'
+import StarRatings from 'react-star-ratings'
+import RatingModal from '../modal/RatingModal'
+import { showAverageRating } from '../../functions/rating'
 
 const { Meta } = Card
 // const { TabPane } = Tabs
 
-const SingleProduct = ({ product }) => {
-  const { title, images, description } = product
+const SingleProduct = ({ product, onStarClick, star }) => {
+  const { title, images, description, _id } = product
 
   return (
     <>
@@ -61,6 +64,13 @@ const SingleProduct = ({ product }) => {
 
       <div className='col-md-5'>
         <h1 className='bg-info p-3'>{title}</h1>
+
+        {product.ratings?.length > 0 ? (
+          showAverageRating(product)
+        ) : (
+          <div className='text-center pt-2 pb-3'>No rating yet</div>
+        )}
+
         <Card
           actions={[
             <>
@@ -69,6 +79,17 @@ const SingleProduct = ({ product }) => {
               <Link to='/'>
                 <HeartOutlined className='text-info' /> <br /> Add to wishlist
               </Link>
+              <RatingModal>
+                <StarRatings
+                  name={_id}
+                  numberOfStars={5}
+                  rating={star}
+                  starRatedColor='blue'
+                  isSelectable={true}
+                  starDimension='24px'
+                  changeRating={onStarClick}
+                />
+              </RatingModal>
             </>,
           ]}
         >

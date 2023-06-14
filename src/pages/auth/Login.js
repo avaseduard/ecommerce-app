@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { auth, googleAuthProvider } from '../../firebase'
 import { MailOutlined, GoogleOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
@@ -13,24 +13,35 @@ import { createOrUpdateUser } from '../../functions/auth'
 const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const { user } = useSelector(state => ({ ...state }))
 
-  // Redirect user based on the role of admin or subscriber
-  const roleBasedRedirect = response => {
-    if (response.data.role === 'admin') {
-      navigate('/admin/dashboard')
+  // If there is an intended page where the user is coming from, return; else redirect logged in users to home page
+  useEffect(() => {
+    let intended = location.state
+    if (intended) {
+      return
     } else {
-      navigate('/user/history')
+      if (user?.user?.token) navigate('/')
+    }
+  }, [user, navigate])
+
+  // If there is an intended page where the user is coming from, send him there; else redirect user based on the role of admin or subscriber
+  const roleBasedRedirect = response => {
+    let intended = location.state
+    if (intended) {
+      navigate(intended.from)
+    } else {
+      if (response.data.role === 'admin') {
+        navigate('/admin/dashboard')
+      } else {
+        navigate('/user/history')
+      }
     }
   }
-
-  // Redirect logged in users to home page
-  // useEffect(() => {
-  //   if (user.currentUser && user.currentUser.token) navigate('/')
-  // }, [user.currentUser])
 
   // Login with email and password; get the result from firebase, destructure user and token and update them to redux store; send the token from frontend to backend
   const handleSubmit = async e => {

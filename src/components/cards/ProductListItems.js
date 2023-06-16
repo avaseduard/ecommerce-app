@@ -22,7 +22,7 @@ const ProductListItems = ({ product }) => {
       <li className='list-group-item'>
         Category{' '}
         <Link
-          to={`category/${category?.slug}`}
+          to={`/category/${category?.slug}`}
           className='badge badge-primary m-1 float-right'
         >
           {category?.name}
@@ -34,7 +34,7 @@ const ProductListItems = ({ product }) => {
         {subcategories?.map(subcategory => (
           <Link
             key={subcategory._id}
-            to={`subcategory/${subcategory.slug}`}
+            to={`/subcategory/${subcategory.slug}`}
             className='badge badge-primary m-1 float-right'
           >
             {subcategory.name}

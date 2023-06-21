@@ -9,23 +9,23 @@ import {
   UserAddOutlined,
   UserOutlined,
   LogoutOutlined,
+  ShoppingOutlined,
 } from '@ant-design/icons'
 
 import { logoutUser } from '../../store/reducers/user.reducer'
+import Search from '../forms/Search'
 
 const Header = () => {
-  const [current, setCurrent] = useState('home')
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
+  const [current, setCurrent] = useState('home')
   const { user } = useSelector(state => ({ ...state }))
-  //! const currentUser = user.currentUser
+
 
   const logout = () => {
     auth.signOut()
     dispatch(
       logoutUser({
-        //! currentUser: null,
         user: null,
       })
     )
@@ -36,11 +36,20 @@ const Header = () => {
     {
       label: (
         <Link to='/' style={{ textDecoration: 'none' }}>
-          home
+          Home
         </Link>
       ),
       key: 'home',
       icon: <HomeOutlined />,
+    },
+    {
+      label: (
+        <Link to='/shop' style={{ textDecoration: 'none' }}>
+          Shop
+        </Link>
+      ),
+      key: 'shop',
+      icon: <ShoppingOutlined />,
     },
     {
       label: 'user',
@@ -106,81 +115,6 @@ const Header = () => {
     },
   ]
 
-  // const loggedOutUserMenuItems = [
-  //   {
-  //     label: (
-  //       <Link to='/' style={{ textDecoration: 'none' }}>
-  //         home
-  //       </Link>
-  //     ),
-  //     key: 'home',
-  //     icon: <HomeOutlined />,
-  //   },
-  //   {
-  //     label: (
-  //       <Link to='/register' style={{ textDecoration: 'none' }}>
-  //         register
-  //       </Link>
-  //     ),
-  //     key: 'register',
-  //     icon: <UserAddOutlined />,
-  //     className: 'float-end',
-  //     style: { marginLeft: 'auto' },
-  //   },
-  //   {
-  //     label: (
-  //       <Link to='/login' style={{ textDecoration: 'none' }}>
-  //         login
-  //       </Link>
-  //     ),
-  //     key: 'login',
-  //     icon: <UserOutlined />,
-  //     className: 'float-end',
-  //   },
-  // ]
-
-  // const loggedInUserMenuItems = [
-  //   {
-  //     label: (
-  //       <Link to='/' style={{ textDecoration: 'none' }}>
-  //         home
-  //       </Link>
-  //     ),
-  //     key: 'home',
-  //     icon: <HomeOutlined />,
-  //   },
-  //   {
-  //     // label: 'user',
-  //     label: currentUser ? currentUser.email.split('@')[0] : 'user',
-  //     key: 'user',
-  //     icon: <SettingOutlined />,
-  //     children: [
-  //       {
-  //         type: 'group',
-  //         // label: 'Item 1',
-  //         children: [
-  //           {
-  //             label: 'Option 1',
-  //             key: 'setting:1',
-  //           },
-  //           {
-  //             label: 'Option 2',
-  //             key: 'setting:2',
-  //           },
-  //           {
-  //             label: 'logout',
-  //             key: 'logout',
-  //             icon: <LogoutOutlined />,
-  //             onClick: () => {
-  //               logout()
-  //             },
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  // ]
-
   const onClick = e => {
     setCurrent(e.key)
   }
@@ -193,6 +127,10 @@ const Header = () => {
         mode='horizontal'
         items={menuItems}
       />
+
+      <span className='float-right p-1'>
+        <Search />
+      </span>
     </>
   )
 }

@@ -28,6 +28,7 @@ import ProductUpdate from './pages/admin/product/ProductUpdate'
 import Product from './pages/Product'
 import CategoryHome from './pages/category/CategoryHome'
 import SubcategoryHome from './pages/subcategory/SubcategoryHome'
+import Shop from './pages/Shop'
 
 import { currentUser } from './functions/auth'
 import { setUser } from './store/reducers/user.reducer'
@@ -42,7 +43,6 @@ const App = () => {
         currentUser(idTokenResult.token)
           .then(response => {
             dispatch(
-              //! setCurrentUser({
               setUser({
                 name: response.data.name,
                 email: response.data.email,
@@ -71,6 +71,7 @@ const App = () => {
         <Route path='/product/:slug' element={<Product />} />
         <Route path='/category/:slug' element={<CategoryHome />} />
         <Route path='/subcategory/:slug' element={<SubcategoryHome />} />
+        <Route path='/shop' element={<Shop />} />
         <Route element={<UserRoute />}>
           <Route path='user/history' element={<History />} />
           <Route path='user/password' element={<Password />} />

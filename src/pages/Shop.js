@@ -1,22 +1,48 @@
 import { useEffect, useState } from 'react'
 import { fetchProductsbyFilter, getProductsByCount } from '../functions/product'
 import { getCategories } from '../functions/category'
+import { getSubcategories } from '../functions/subcategory'
 import ProductCard from '../components/cards/ProductCard'
 import { useDispatch, useSelector } from 'react-redux'
-import { Checkbox, Menu, Slider } from 'antd'
+import { Checkbox, Menu, Radio, Slider } from 'antd'
 import SubMenu from 'antd/es/menu/SubMenu'
-import { DollarOutlined, DownSquareOutlined } from '@ant-design/icons'
+import {
+  DollarOutlined,
+  DownSquareOutlined,
+  StarOutlined,
+} from '@ant-design/icons'
 import { setSearch } from '../store/reducers/search.reducer'
+import Star from '../components/forms/Star'
 
 const Shop = () => {
   const dispatch = useDispatch()
+  const { search } = useSelector(state => ({ ...state }))
+  const { text } = search
   const [loading, setLoading] = useState(false)
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [categoryIds, setCategoryIds] = useState([])
   const [price, setPrice] = useState([0, 9999])
-  const { search } = useSelector(state => ({ ...state }))
-  const { text } = search
+  const [star, setStar] = useState('')
+  const [subcategories, setSubcategories] = useState([])
+  const [subcategory, setSubcategory] = useState('')
+  const [brands, setBrands] = useState([
+    'Apple',
+    'Samsung',
+    'Microsoft',
+    'Lenovo',
+    'ASUS',
+  ])
+  const [selectedBrand, setSelectedBrand] = useState('')
+  const [colors, setColors] = useState([
+    'Black',
+    'Brown',
+    'Silver',
+    'White',
+    'Blue',
+  ])
+  const [selectedColor, setSelectedColor] = useState('')
+  const [shipping, setShipping] = useState('')
 
   const fetchProducts = argument => {
     fetchProductsbyFilter(argument).then(res => {
@@ -29,6 +55,7 @@ const Shop = () => {
   useEffect(() => {
     loadAllProducts()
     loadCategories()
+    loadSubcategories()
   }, [])
   //
   const loadAllProducts = () => {
@@ -43,6 +70,14 @@ const Shop = () => {
     setLoading(true)
     getCategories().then(res => {
       setCategories(res.data)
+      setLoading(false)
+    })
+  }
+  //
+  const loadSubcategories = () => {
+    setLoading(true)
+    getSubcategories().then(res => {
+      setSubcategories(res.data)
       setLoading(false)
     })
   }
@@ -83,7 +118,43 @@ const Shop = () => {
       inTheState.splice(foundInTheState, 1)
     }
     setCategoryIds(inTheState)
-    fetchProducts({category: inTheState})
+    fetchProducts({ category: inTheState })
+  }
+
+  // Load products based on rating
+  const handleStarClick = number => {
+    dispatch(setSearch(''))
+    setStar(number)
+    fetchProducts({ stars: number })
+  }
+
+  // Load products based on subcategory
+  const handleSubcategory = subcategory => {
+    // console.log('SUBCATEGORY -->', subcategory)
+    dispatch(setSearch(''))
+    setSubcategory(subcategory)
+    fetchProducts({ subcategory: subcategory })
+  }
+
+  // Load products based on brand
+  const handleBrand = e => {
+    dispatch(setSearch(''))
+    setSelectedBrand(e.target.value)
+    fetchProducts({ brand: e.target.value })
+  }
+
+  // Load products based on color
+  const handleColor = e => {
+    dispatch(setSearch(''))
+    setSelectedColor(e.target.value)
+    fetchProducts({ color: e.target.value })
+  }
+
+  // Load products based on shipping
+  const handleShipping = e => {
+    dispatch(setSearch(''))
+    setShipping(e.target.value)
+    fetchProducts({ shipping: e.target.value })
   }
 
   return (
@@ -93,7 +164,10 @@ const Shop = () => {
           <h4>Filter</h4>
           <hr />
 
-          <Menu mode='inline' defaultOpenKeys={['1', '2']}>
+          <Menu
+            mode='inline'
+            defaultOpenKeys={['1', '2', '3', '4', '5', '6', '7']}
+          >
             {/* Price filter */}
             <SubMenu
               title={
@@ -138,9 +212,129 @@ const Shop = () => {
                 </div>
               ))}
             </SubMenu>
+
+            {/* Rating filter */}
+            <SubMenu
+              title={
+                <span className='h6'>
+                  <StarOutlined /> Rating
+                </span>
+              }
+              key={'3'}
+            >
+              <div className='pr-4 pb4 pl-2'>
+                <Star starClick={handleStarClick} numberOfStars={5} />
+                <Star starClick={handleStarClick} numberOfStars={4} />
+                <Star starClick={handleStarClick} numberOfStars={3} />
+                <Star starClick={handleStarClick} numberOfStars={2} />
+                <Star starClick={handleStarClick} numberOfStars={1} />
+              </div>
+            </SubMenu>
+
+            {/* Subcategories filter */}
+            <SubMenu
+              title={
+                <span className='h6'>
+                  <DownSquareOutlined /> Subcategories
+                </span>
+              }
+              key={4}
+            >
+              {subcategories.map(subcategory => (
+                <div
+                  key={subcategory._id}
+                  onClick={() => handleSubcategory(subcategory)}
+                  className='p-1 m-1 badge badge-secondary'
+                  style={{ cursor: 'pointer' }}
+                >
+                  {subcategory.name}
+                </div>
+                // <br />
+              ))}
+            </SubMenu>
+
+            {/* Brand filter */}
+            <SubMenu
+              title={
+                <span className='h6'>
+                  <DownSquareOutlined /> Brands
+                </span>
+              }
+              key={5}
+            >
+              {brands.map(brand => (
+                <div key={brand}>
+                  <Radio
+                    value={brand}
+                    name={brand}
+                    checked={brand === selectedBrand}
+                    onChange={handleBrand}
+                    className='pb-1 pl-1 pr-4'
+                  >
+                    {brand}
+                  </Radio>
+                  <br />
+                </div>
+              ))}
+            </SubMenu>
+
+            {/* Color filter */}
+            <SubMenu
+              title={
+                <span className='h6'>
+                  <DownSquareOutlined /> Color
+                </span>
+              }
+              key={6}
+            >
+              {colors.map(color => (
+                <div key={color}>
+                  <Radio
+                    value={color}
+                    name={color}
+                    checked={color === selectedColor}
+                    onChange={handleColor}
+                    className='pb-1 pl-1 pr-4'
+                  >
+                    {color}
+                  </Radio>
+                  <br />
+                </div>
+              ))}
+            </SubMenu>
+
+            {/* Shipping filter */}
+            <SubMenu
+              title={
+                <span className='h6'>
+                  <DownSquareOutlined /> Shipping
+                </span>
+              }
+              key={7}
+            >
+              <>
+                <Checkbox
+                  value='Yes'
+                  checked={shipping === 'Yes'}
+                  onChange={handleShipping}
+                  className='pb-1 pl-1 pr-4'
+                >
+                  Yes
+                </Checkbox>
+                <Checkbox
+                  value='No'
+                  checked={shipping === 'No'}
+                  onChange={handleShipping}
+                  className='pb-1 pl-1 pr-4'
+                >
+                  No
+                </Checkbox>
+              </>
+            </SubMenu>
           </Menu>
         </div>
 
+        {/* Products */}
         <div className='col-md-9 pt-2'>
           {loading ? (
             <h4 className='text-danger'>Loading...</h4>

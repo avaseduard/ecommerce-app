@@ -1,9 +1,10 @@
 import { useEffect } from 'react'
 import { auth } from './firebase'
 import { useDispatch } from 'react-redux'
-//! import { setCurrentUser } from './store/reducers/user.reducer'
 import { Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
+import { currentUser } from './functions/auth'
+import { setUser } from './store/reducers/user.reducer'
 import 'react-toastify/dist/ReactToastify.css'
 
 import Header from './components/nav/Header'
@@ -29,9 +30,8 @@ import Product from './pages/Product'
 import CategoryHome from './pages/category/CategoryHome'
 import SubcategoryHome from './pages/subcategory/SubcategoryHome'
 import Shop from './pages/Shop'
-
-import { currentUser } from './functions/auth'
-import { setUser } from './store/reducers/user.reducer'
+import Cart from './pages/Cart'
+import SideDrawer from './components/drawer/SideDrawer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -62,6 +62,7 @@ const App = () => {
     <>
       <ToastContainer />
       <Header />
+      <SideDrawer />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
@@ -72,6 +73,7 @@ const App = () => {
         <Route path='/category/:slug' element={<CategoryHome />} />
         <Route path='/subcategory/:slug' element={<SubcategoryHome />} />
         <Route path='/shop' element={<Shop />} />
+        <Route path='/cart' element={<Cart />} />
         <Route element={<UserRoute />}>
           <Route path='user/history' element={<History />} />
           <Route path='user/password' element={<Password />} />

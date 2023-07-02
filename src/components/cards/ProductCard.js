@@ -1,13 +1,42 @@
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Card } from 'antd'
 import { EyeOutlined, ShoppingCartOutlined } from '@ant-design/icons'
+import { Tooltip } from 'antd'
 import { Link } from 'react-router-dom'
 import pictureunavailable from '../../../src/images/picture_unavailable.jpg'
 import { showAverageRating } from '../../functions/rating'
+import _ from 'lodash'
+import { setCart } from '../../store/reducers/cart.reducer'
+import { setDrawerVisibility } from '../../store/reducers/drawer.reducer'
 
 const { Meta } = Card
 
 const ProductCard = ({ product }) => {
+  const dispatch = useDispatch()
+  // const { cart } = useSelector(state => ({ ...state }))
+  const [tooltip, setTooltip] = useState('Buy')
   const { title, description, images, slug, price } = product
+
+  // Add to cart functionality
+  const handleAddToCart = () => {
+    let cartItems = []
+    // If there's a cart already in local storage, get it
+    if (localStorage.getItem('cart'))
+      cartItems = JSON.parse(localStorage.getItem('cart'))
+    // If there's no cart in local storage, push the item
+    cartItems.push({ ...product, count: 1 })
+    // Remove duplicates
+    const cartWithUniqueItems = _.uniqWith(cartItems, _.isEqual)
+    // Save to local storage
+    localStorage.setItem('cart', JSON.stringify(cartWithUniqueItems))
+    // Show tooltip
+    setTooltip('Added')
+    // Save to redux state
+    dispatch(setCart(cartWithUniqueItems))
+    // Set side drawer to visible
+    dispatch(setDrawerVisibility(true))
+  }
 
   return (
     <>
@@ -32,9 +61,13 @@ const ProductCard = ({ product }) => {
               <br />
               View product
             </Link>
-            <ShoppingCartOutlined className='text-danger' />
-            <br />
-            Add to cart
+            <Tooltip title={tooltip}>
+              <a onClick={handleAddToCart}>
+                <ShoppingCartOutlined className='text-danger' />
+                <br />
+              </a>
+              Add to cart
+            </Tooltip>
           </>,
         ]}
       >

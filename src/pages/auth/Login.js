@@ -5,8 +5,6 @@ import { auth, googleAuthProvider } from '../../firebase'
 import { MailOutlined, GoogleOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import { toast } from 'react-toastify'
-
-//! import { setCurrentUser } from '../../store/reducers/user.reducer'
 import { setUser } from '../../store/reducers/user.reducer'
 import { createOrUpdateUser } from '../../functions/auth'
 
@@ -60,7 +58,6 @@ const Login = () => {
       createOrUpdateUser(idTokenResult.token)
         .then(response => {
           dispatch(
-            //! setCurrentUser({
             setUser({
               name: response.data.name,
               email: response.data.email,
@@ -89,7 +86,6 @@ const Login = () => {
       createOrUpdateUser(idTokenResult.token)
         .then(response => {
           dispatch(
-            //! setCurrentUser({
             setUser({
               name: response.data.name,
               email: response.data.email,

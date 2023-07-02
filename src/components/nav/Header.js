@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { auth } from '../../firebase'
-import { Menu } from 'antd'
+import { Badge, Menu } from 'antd'
 import {
   SettingOutlined,
   HomeOutlined,
@@ -10,6 +10,7 @@ import {
   UserOutlined,
   LogoutOutlined,
   ShoppingOutlined,
+  ShoppingCartOutlined,
 } from '@ant-design/icons'
 
 import { logoutUser } from '../../store/reducers/user.reducer'
@@ -19,8 +20,7 @@ const Header = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [current, setCurrent] = useState('home')
-  const { user } = useSelector(state => ({ ...state }))
-
+  const { user, cart } = useSelector(state => ({ ...state }))
 
   const logout = () => {
     auth.signOut()
@@ -50,6 +50,17 @@ const Header = () => {
       ),
       key: 'shop',
       icon: <ShoppingOutlined />,
+    },
+    {
+      label: (
+        <Link to='/cart' style={{ textDecoration: 'none' }}>
+          <Badge count={cart.cart.length} offset={[9, 0]}>
+            Cart
+          </Badge>
+        </Link>
+      ),
+      key: 'cart',
+      icon: <ShoppingCartOutlined />,
     },
     {
       label: 'user',

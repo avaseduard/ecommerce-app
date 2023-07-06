@@ -1,8 +1,10 @@
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import ProductCardInCheckout from '../components/cards/ProductCardInCheckout'
+import { userCart } from '../functions/user'
 
 const Cart = () => {
+  const navigate = useNavigate()
   const { cart, user } = useSelector(state => ({ ...state }))
 
   const cartLength = cart.cart.length
@@ -11,8 +13,15 @@ const Cart = () => {
     .map(product => product.count * product.price)
     .reduce((a, b) => a + b, 0)
 
+  // Save the order to db and redirect to checkout
   const saveOrderToDb = () => {
-    //
+    console.log(cart)
+    userCart(cart.cart, user.user.token)
+      .then(res => {
+        console.log('ORDER SAVED TO DB -->', res)
+        if (res.data.ok) navigate('/checkout')
+      })
+      .catch(err => console.log('ORDER SAVED TO DB ERROR -->', err))
   }
 
   return (
